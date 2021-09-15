@@ -1,0 +1,44 @@
+﻿@{ 
+    Layout = null;
+}
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/Student.js"></script>
+    <link href="~/CSS/Student.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container card-0 justify-content-center ">
+        <div class="card-body px-sm-4 px-0">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-10 col">
+                    <h3 class="font-weight-bold ml-md-0 mx-auto text-center text-sm-left"> Prijava </h3>
+                </div>
+            </div>
+            @using (Html.BeginForm("Prijava", "Home", FormMethod.Post))
+            {
+        <div class="row justify-content-center round">
+            <div class="col-lg-10 col-md-12 ">
+                <div class="card shadow-lg card-1">
+                    <div class="card-body inner-card">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <div class="form-group"><label for="phone">Email</label><input name="email" type="email" class="form-control" id="email" placeholder="Unesite email adresu"> </div>
+                                <div class="form-group"> <label for="Mobile-Number">Lozinka</label> <input name="sifra" type="password" class="form-control" id="lozinka" placeholder="Unesite lozinku"> </div>
+                                <div class="form-group">
+                                    <div class="col-lg-pull-12 col-auto "><button type="submit" class="btn btn-primary btn-block"><small class="font-weight-bold">Prijava</small></button> </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            }
+                    </div>
+    </div>
+</body>

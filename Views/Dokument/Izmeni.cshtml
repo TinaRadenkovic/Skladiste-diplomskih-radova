@@ -1,0 +1,140 @@
+﻿
+
+@{ Layout = null; }
+
+<head>
+    <title>Skladište diplomskih radova</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="~/CSS/Biblioteka.css" rel="stylesheet">
+</head>
+<body>
+
+
+        <div class="l-sidebar">
+            <div class="logo">
+                <div class="logo__txt"></div>
+            </div>
+            <div class="l-sidebar__content">
+                <nav class="c-menu js-menu">
+                    <ul class="u-list">
+                        <li class="c-menu__item has-submenu" data-toggle="tooltip" title="Proposals">
+                            <div class="c-menu__item__inner">
+                                <i class="fa fa-file-text-o"></i>
+                                <div class="c-menu-item__title"><span>Nova dokumenta</span></div>
+                            </div>
+                        </li>
+                        <li class="c-menu__item has-submenu" data-toggle="tooltip" title="History">
+                            <div class="c-menu__item__inner">
+                                <i class="fa fa-history"></i>
+                                <div class="c-menu-item__title"><span>Arhiva</span></div>
+                            </div>
+                        </li>
+                        <li class="c-menu__item has-submenu" data-toggle="tooltip" title="Accounts">
+                            <div class="c-menu__item__inner">
+                                <i class="fa fa-address-book-o"></i>
+                                <div class="c-menu-item__title"><span>Nalog</span></div>
+                            </div>
+                        </li>
+                        <li class="c-menu__item has-submenu" data-toggle="tooltip" title="Settings">
+                            <div class="c-menu__item__inner">
+                                <i class="fa fa-cogs"></i>
+                                <div class="c-menu-item__title"><span>Podešavanja</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="py-5 text-center">
+
+                <h2></h2>
+            </div>
+
+            @using (Html.BeginForm("Obradi", "Dokument", FormMethod.Post))
+            {
+        <input type="hidden" name="id" value="@ViewBag.dokument._Id" />
+                        <input type="hidden" name="rev" value="@ViewBag.dokument.Rev" />
+                                        <input type="hidden" name="vreme" value="@ViewBag.dokument.Vreme" />
+                                                        <input type="hidden" name="putanja" value="@ViewBag.dokument.Putanja" />
+                                                                        <div class="row" style="border: thin">
+                                                                            <div class="row">
+
+                                                                                <div class="col-md-8 order-md-1">
+                                                                                    <h4 class="mb-3">Podaci o studentu</h4>
+                                                                                    <form class="needs-validation" novalidate="">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-6 mb-3">
+                                                                                                <label for="firstName">Ime</label>
+                                                                                                <input type="text" class="form-control" name="ime" placeholder="" value="@ViewBag.student.Ime" required="">
+                                                                                                <div class="invalid-feedback"> </div>
+                                                                                            </div>
+                                                                                            <div class="col-md-6 mb-3">
+                                                                                                <label for="lastName">Prezime</label>
+                                                                                                <input type="text" class="form-control" name="prezime" placeholder="" value="@ViewBag.student.Prezime" required="">
+                                                                                                <div class="invalid-feedback"> </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="mb-3">
+                                                                                            <label for="username">Broj indeksa</label>
+                                                                                            <div class="input-group">
+                                                                                                <div class="input-group-prepend">
+                                                                                                    <span class="input-group-text"></span>
+                                                                                                </div>
+                                                                                                <input type="text" class="form-control" name="brojIndeksa" placeholder="" required="" value="@ViewBag.student.BrojIndeksa">
+                                                                                                <div class="invalid-feedback" style="width: 100%;">  </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="mb-3">
+                                                                                            <label for="email">Email <span class="text-muted"></span></label>
+                                                                                            <input type="email" class="form-control" name="email" placeholder="" value="@ViewBag.student.Email">
+                                                                                            <div class="invalid-feedback"> </div>
+                                                                                        </div>
+                                                                                        <div class="mb-3">
+                                                                                            <label for="address">Smer</label>
+                                                                                            <input type="text" class="form-control" name="smer" placeholder="" required="" value="@ViewBag.student.Smer">
+                                                                                            <div class="invalid-feedback">  </div>
+                                                                                        </div>
+                                                                                        <div class="mb-3">
+                                                                                            <label for="address2">Modul<span class="text-muted"></span></label>
+                                                                                            <input type="text" class="form-control" name="modul" placeholder="" value="@ViewBag.student.Modul">
+                                                                                        </div>
+                                                                                        <h4 class="mb-3">Podaci o radu</h4>
+
+                                                                                        <div class="mb-3">
+                                                                                            <label for="address2">Tema<span class="text-muted"></span></label>
+                                                                                            <input type="text" class="form-control" name="tema" placeholder="" value="@ViewBag.dokument.Naziv">
+                                                                                        </div>
+
+                                                                                        <div class="mb-3">
+                                                                                            <label for="address2">Zadatak <span class="text-muted"></span></label>
+                                                                                            <input type="text" class="form-control" name="zadatak" placeholder="" value="">
+                                                                                            <div class="invalid-feedback"> </div>
+                                                                                        </div>
+
+                                                                                        <div class="mb-3">
+                                                                                            <label for="address2">Mentor <span class="text-muted"></span></label>
+                                                                                            <input type="text" class="form-control" name="mentor" placeholder="" value="">
+                                                                                            <div class="invalid-feedback"> </div>
+                                                                                        </div>
+
+
+
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <hr class="">
+                                                                            <div class="mb-3"><button type="submit" class="btn-primary"><medium class="font-weight-bold">Obradite</medium></button> </div>
+
+
+                                                                        </div>
+                                                                        }
+
+        </div>
+</body>

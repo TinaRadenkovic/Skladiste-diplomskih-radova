@@ -1,0 +1,236 @@
+ private void BtnPotvrdi_Click(object sender, EventArgs e)
+        {
+            DataRow red = null;
+
+
+            Korisnik korisnik = new Korisnik();
+            int id = PomocneFunkcije.VratiMaxIdKorisnika() + 1;
+            string jmbg = TxtMaticniBroj.Text;
+            string ime = TxtIme.Text;
+            string prezime = TxtPrezime.Text;
+            string sifra = TxtLozinka.Text;
+            string potvrdaSifre = TxtPotvrdaLozinke.Text;
+           
+            // Provera da li postoji maticni broj 
+            List<Korisnik> korisnici = new List<Korisnik>();
+            using (PrekidiEntities db = new PrekidiEntities())
+            {
+                 korisnici = db.Korisnik.Where(i=>i.Aktivan==true).ToList();
+
+               
+            }
+
+            foreach(Korisnik k in korisnici)
+            {
+                if (jmbg.Equals(k.Maticni_broj))
+                {
+                    MessageBox.Show("Uneli ste matični broj koji već postoji.", "Obaveštenje");
+                    return;
+                }
+            }
+            // Provera svih podataka koje korisnik unosi.
+            if (CmbGrupa.SelectedIndex == -1)
+            {
+                MessageBox.Show("Niste izabrali tip korisnika.", "Obaveštenje");
+                return;
+            }
+            if (CmbPodrucje.SelectedIndex == -1)
+            {
+                MessageBox.Show("Niste izabrali područje.", "Obaveštenje");
+                return;
+            }
+            string grupa = CmbGrupa.Items[CmbGrupa.SelectedIndex].ToString(); //CmbGrupa.SelectedItem.ToString();
+                                                                              //MessageBox.Show(grupa);
+            string podrucje = CmbPodrucje.Items[CmbPodrucje.SelectedIndex].ToString();
+
+            if (jmbg == null || !DaLiJeBroj(jmbg) || jmbg.Count() != 13)
+            {
+                MessageBox.Show("Matični broj mora da ima 13 cifara.", "Obaveštenje");
+                return;
+            }
+            if (ime == null || prezime == null)
+            {
+                MessageBox.Show("Uneiste ime i prezime.", "Obaveštenje");
+                return;
+            }
+            if (ime.All(char.IsDigit))
+            {
+                MessageBox.Show("Niste uneli ispravno ime.", "Obaveštenje");
+                return;
+
+            }
+            if (prezime.All(char.IsDigit))
+            {
+                MessageBox.Show("Niste uneli ispravno prezime.", "Obaveštenje");
+                return;
+
+            }
+
+           
+            byte[] kodiranaLozinka;
+            byte[] lozinkaHash;
+
+            if (dodavanje)
+            {
+                if (sifra.Equals(potvrdaSifre))
+                {
+
+                    // Ako je dodavanje i sifre su popunjene  
+                    if ((!sifra.Equals("") && !potvrdaSifre.Equals("")))
+                    {
+
+                        using (PrekidiEntities db = new PrekidiEntities())
+                        {
+
+                            // Dodaljivanje vrednosti novom korisniku.
+                            int sifraGrupe = VratiGrupu(grupa).Sifra_grupe_;
+                            korisnik.Ime = PomocneFunkcije.KonverzijaIzLatiniceUCirilicu(ime);
+                            korisnik.Prezime = PomocneFunkcije.KonverzijaIzLatiniceUCirilicu(prezime);
+                            korisnik.Maticni_broj = jmbg;
+                            korisnik.Sifra_grupe_ = sifraGrupe;
+                            korisnik.Aktivan = true;
+
+
+
+                            kodiranaLozinka = new UTF8Encoding().GetBytes(sifra);
+                            lozinkaHash = ((HashAlgorithm)CryptoConfig.CreateFromName("SHA512")).ComputeHash(kodiranaLozinka);
+                            korisnik.Lozinka = lozinkaHash;
+                            korisnik.Sifra_korisnika_ = id;
+
+
+                            int sifraPodrucja = 0;
+                            sifraPodrucja = VratiSifruOgranka(podrucje);
+                            if (sifraPodrucja > 0)
+                                korisnik.Sifra_distributivnog_podrucja_ = sifraPodrucja;
+
+                            db.Korisnik.Add(korisnik);
+
+                            db.SaveChanges();
+                            if (dodavanje)
+                            {
+                                // Log
+                                Akcija akcija = PomocneFunkcije.VratiAkciju("Додавање");
+                                string opis = "Нови корисник: " + KonverzijaIzLatiniceUCirilicu(korisnik.Ime)
+                                    + " " + KonverzijaIzLatiniceUCirilicu(korisnik.Prezime) + ", матични број: " + korisnik.Maticni_broj;
+                                PomocneFunkcije.UpisiLog(db, trenutniKorisnik, akcija, opis);
+                                MessageBox.Show("Korisnik je dodat.", "Obaveštenje");
+                            }
+
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unesite šifru.", "Obaveštenje");
+                        return;
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Šifre moraju biti iste.", "Obaveštenje");
+                    return;
+                }
+
+            }
+            else
+            {
+                using (PrekidiEntities db = new PrekidiEntities())
+                {
+                    korisnik = db.Korisnik.Find(korisnikZaIzmenu.Sifra_korisnika_);
+                    red = tabela.Rows.Find(korisnikZaIzmenu.Sifra_korisnika_);
+                    // Menja lozinku
+                    if (ChbLozinka.Checked)
+                    {
+                        // Provera da li su sifre iste 
+                        if (sifra.Equals(potvrdaSifre))
+                        {
+                            //Provera da li su popunjena polja za sifru i potvrdu sifre
+                            if (!sifra.Equals("") && !potvrdaSifre.Equals(""))
+                            {
+                                //Izmena lozinke
+
+                                string izmenaSifre = TxtLozinka.Text;
+                                string izmenaSifrePotvrda = TxtPotvrdaLozinke.Text;
+                                byte[] staraSifraKorisnika = korisnik.Lozinka;
+                                if (izmenaSifre.Equals(izmenaSifrePotvrda))
+                                {
+                                    kodiranaLozinka = new UTF8Encoding().GetBytes(izmenaSifre);
+                                    lozinkaHash = ((HashAlgorithm)CryptoConfig.CreateFromName("SHA512")).ComputeHash(kodiranaLozinka);
+                                    if (lozinkaHash.SequenceEqual(staraSifraKorisnika))
+                                    {
+                                        MessageBox.Show("Uneli ste staru šifru, molim Vas unesite novu šifru.", "Obaveštenje");
+                                        return;
+                                    }
+                                    else
+                                        korisnik.Lozinka = lozinkaHash;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Šifre moraju da budu iste.", "Obaveštenje");
+                                    return;
+                                }
+
+
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("Unesite šifru.", "Obaveštenje");
+                                return;
+                            }
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Šifre moraju biti iste.", "Obaveštenje");
+                            return;
+                        }
+                    }
+                    else //Ne menja lozinku
+                    {
+                        byte[] staraSifraKorisnika = korisnik.Lozinka;
+                        korisnik.Lozinka = staraSifraKorisnika;
+                    }
+                    int sifraGrupe = VratiGrupu(grupa).Sifra_grupe_;
+                    korisnik.Ime = PomocneFunkcije.KonverzijaIzLatiniceUCirilicu(ime);
+                    korisnik.Prezime = PomocneFunkcije.KonverzijaIzLatiniceUCirilicu(prezime);
+                    korisnik.Maticni_broj = jmbg;
+                    korisnik.Sifra_grupe_ = sifraGrupe;
+                    korisnik.Aktivan = true;
+                    int sifraPodrucja = 0;
+                    sifraPodrucja = VratiSifruOgranka(podrucje);
+                    if (sifraPodrucja > 0)
+                        korisnik.Sifra_distributivnog_podrucja_ = sifraPodrucja;
+
+
+                    db.SaveChanges();
+
+                    int indeksReda = tabela.Rows.IndexOf(red);
+                    tabela.Rows[indeksReda].ItemArray[0] = korisnik.Maticni_broj;
+                    tabela.Rows[indeksReda].ItemArray[1] = korisnik.Ime;
+                    tabela.Rows[indeksReda].ItemArray[2] = korisnik.Prezime;
+                    tabela.Rows[indeksReda].ItemArray[3] = korisnik.Grupa;
+
+                    // Log
+                    Akcija akcija = PomocneFunkcije.VratiAkciju("Измена");
+                    string opis = "Измена корисника:старе вредности: " + korisnikZaIzmenu.Ime
+                        + " " + korisnikZaIzmenu.Prezime + ", матични број: " + korisnikZaIzmenu.Maticni_broj
+                        + ", група: " + KonverzijaIzLatiniceUCirilicu(VratiGrupu(korisnikZaIzmenu.Sifra_grupe_).Naziv_grupe)
+                        + ", нове вредности: " + korisnik.Ime
+                        + " " + korisnik.Prezime + ", матични број: " + korisnik.Maticni_broj
+                        + ", група: " + KonverzijaIzLatiniceUCirilicu(VratiGrupu(korisnik.Sifra_grupe_).Naziv_grupe);
+
+                    PomocneFunkcije.UpisiLog(db, trenutniKorisnik, akcija, opis);
+                    MessageBox.Show("Korisnik je izmenjen.", "Obaveštenje");
+                }
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+
+
+
+
+            }
+        }
