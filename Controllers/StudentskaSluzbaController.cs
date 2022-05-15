@@ -11,8 +11,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
 {
     public class StudentskaSluzbaController : Controller
     {
-        
-        // GET: StudentskaSluzba
         public ActionResult Index()
         {
             // Pronalazi dokumenta sa statusom Obradjeno
@@ -40,7 +38,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
             return View();
         }
 
-        // GET: StudentskaSluzba/Details/5
         public ActionResult Studenti()
         {
             List<Student> listaStudenata = new List<Student>();
@@ -63,7 +60,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
             return View();
         }
 
-        // GET: StudentskaSluzba/Create
         public ActionResult PretragaStudenti(string pretraga)
         {
             List<Student> listaStudenata = new List<Student>();
