@@ -19,5 +19,6 @@ namespace SkladisteDiplomskihRadovaWeb.Models
         public string Smer { get; set; }
         public string Tip { get; set; }
         public Dokument Dokument { get; set; }
+        public string PodModul { get; set; }
     }
 }
