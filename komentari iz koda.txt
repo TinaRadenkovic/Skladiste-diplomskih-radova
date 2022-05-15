@@ -1,0 +1,14 @@
+ // RADIIIII
+
+                /*string pretraga = "st";
+
+                var upitNaziv = new FindRequest().Configure(q => q.SelectorExpression("{\"naziv\": {\"$regex\": \""+ pretraga +"\"}}"));
+                var dokumenta = db.Queries.FindAsync(upitNaziv).Result;*/
+
+
+        // Izmeni dokument na osnovu podataka
+        // Izmeni status dokumenta na Obradjeno
+
+        //var izmena = db.Documents.PutAsync(id, rev, "{\"mentor\":\""+mentor+"\", \"status\":\"Obradjeno\"}").Result;
+        //var izmena = db.Entities.PutAsync<Dokument>(dokument);
+        //"1-65a95a372f7a6ef12eb30e9daba1d388", "{\"ime\":\"Izmenjeno\"}").Result;

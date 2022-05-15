@@ -11,7 +11,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
 {
     public class BibliotekaController : Controller
     {
-        // GET: Biblioteka
         public ActionResult Index()
         {
 
@@ -35,15 +34,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
                 }
                 else
                     TempData["brojNovihDokumenata"] = 0;
-
-                // RADIIIII
-
-                /*string pretraga = "st";
-
-                var upitNaziv = new FindRequest().Configure(q => q.SelectorExpression("{\"naziv\": {\"$regex\": \""+ pretraga +"\"}}"));
-                var dokumenta = db.Queries.FindAsync(upitNaziv).Result;*/
-
-
 
             }
 
@@ -84,7 +74,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
         }
 
 
-        // GET: Biblioteka/Delete/5
         public ActionResult Pretraga(string pretraga)
         {
             List<Dokument> listaRadova = new List<Dokument>();
@@ -145,20 +134,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
             return RedirectToAction("Arhiva", "Biblioteka");
         }
 
-        // POST: Biblioteka/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

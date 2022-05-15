@@ -11,7 +11,6 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
 {
     public class DokumentController : Controller
     {
-        // GET: Dokument
         public ActionResult Index()
         {
             return View();
@@ -53,12 +52,7 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
             return View();
         }
 
-        // Izmeni dokument na osnovu podataka
-        // Izmeni status dokumenta na Obradjeno
 
-        //var izmena = db.Documents.PutAsync(id, rev, "{\"mentor\":\""+mentor+"\", \"status\":\"Obradjeno\"}").Result;
-        //var izmena = db.Entities.PutAsync<Dokument>(dokument);
-        //"1-65a95a372f7a6ef12eb30e9daba1d388", "{\"ime\":\"Izmenjeno\"}").Result;
 
         [HttpPost]
         public ActionResult Obradi(string id, string rev, string vreme, string putanja, string ime, 
@@ -87,8 +81,7 @@ namespace SkladisteDiplomskihRadovaWeb.Controllers
             return RedirectToAction("Index", "Biblioteka");
         }
 
-        // pronaci dokument na osnovu id-a
-        // pronaci studenta na osnovu broja indeksa 
+      
         public ActionResult Obrisi(string id)
         {
             Dokument dokument = new Dokument();

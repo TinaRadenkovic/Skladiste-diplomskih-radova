@@ -136,8 +136,6 @@ Console.Write(response.GenerateToStringDebugVersion());
                 return RedirectToAction(nameof(HomeController.Index), "Index");
 
             }
-            //.Views.QueryAsync<Student>(query).Result;
-            // .FindAsync<Student>(request).Result;
             
 
         }
